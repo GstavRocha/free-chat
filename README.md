@@ -1,12 +1,5 @@
-Aqui está um **README.md profissional**, já no nível que combina com o SDD que você construiu (parecendo projeto real de engenharia, não tutorial GitHub). Ele também já posiciona bem o projeto para TCC ou portfólio.
-
----
-
-# README.md
-
-```md
 # Free Chat Maker
-
+*
 Sistema de chat institucional com salas públicas, comunicação em tempo real e moderação administrativa, desenvolvido utilizando abordagem **Spec-Driven Development (SDD)** para garantir consistência arquitetural, rastreabilidade de requisitos e evolução sustentável.
 
 O projeto foi estruturado seguindo práticas modernas de engenharia de software, separando claramente:
@@ -79,70 +72,6 @@ Docker (infraestrutura)
 - Docker
 - Docker Compose
 - PostgreSQL container
-
----
-
-# Modos de execução com Docker Compose
-
-O projeto possui dois modos principais de execução com Docker:
-
-## 1. Modo padrão
-
-Arquivo usado:
-
-- `docker-compose.yml`
-
-Características:
-
-- frontend servido em modo mais estável
-- build estático do frontend
-- entrega do frontend via `nginx`
-- comportamento mais próximo de um cenário de publicação
-
-Comando:
-
-```bash
-docker compose up -d --build
-```
-
-Portas principais:
-
-- frontend: `http://localhost:8080`
-- backend: `http://localhost:3000`
-- postgres: `localhost:5435`
-
-## 2. Modo desenvolvimento
-
-Arquivo usado:
-
-- `docker-compose.dev.yml`
-
-Características:
-
-- frontend rodando com `npm run dev`
-- Vite ativo dentro do container
-- bind mount do código do frontend
-- iteração local mais rápida durante a FASE 7
-
-Comando:
-
-```bash
-docker compose -f docker-compose.dev.yml up -d --build
-```
-
-Portas principais:
-
-- frontend: `http://localhost:8080`
-- backend: `http://localhost:3000`
-- postgres: `localhost:5435`
-
-## Observação importante
-
-O modo desenvolvimento usa o arquivo:
-
-- [`frontend/docker-entrypoint.sh`](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/frontend/docker-entrypoint.sh)
-
-Esse entrypoint está marcado como temporário porque existe para acelerar a iteração do frontend durante o desenvolvimento. O modo padrão continua sendo a opção mais coerente para validações mais estáveis da stack.
 
 ## Engenharia
 
@@ -409,34 +338,6 @@ backend/.env.example
 dockerenv.example
 
 ```
-
-Variaveis minimas obrigatorias do backend:
-
-```
-
-PORT
-DB_HOST
-DB_PORT
-DB_NAME
-DB_USER
-DB_PASS
-JWT_SECRET
-
-```
-
-Variavel opcional recomendada:
-
-```
-
-JWT_EXPIRES_IN=1d
-
-```
-
-Observacao sobre o frontend em producao:
-
-- no `docker-compose.yml` atual, o frontend usa proxy Nginx para `/api` e `/ws`
-- por isso, `VITE_API_BASE_URL` e `VITE_WS_BASE_URL` nao sao obrigatorias no deploy padrao
-- essas variaveis so devem ser definidas se o frontend for buildado para apontar para endpoints externos explicitos
 
 ## Rodar servidor
 
