@@ -12,8 +12,8 @@
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "test": "node --test tests/**/*.test.js",
-    "migrate": "node src/database/run-migrations.js",
-    "migrate:down": "node src/database/run-migrations.js down"
+    "migrate": "bash ./scripts/run-migrations.sh",
+    "migrate:down": "bash ./scripts/run-migrations.sh down"
   },
   "keywords": [
     "SDD",

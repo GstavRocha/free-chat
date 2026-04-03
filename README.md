@@ -1,488 +1,392 @@
 # Free Chat Maker
-*
-Sistema de chat institucional com salas públicas, comunicação em tempo real e moderação administrativa, desenvolvido utilizando abordagem **Spec-Driven Development (SDD)** para garantir consistência arquitetural, rastreabilidade de requisitos e evolução sustentável.
 
-O projeto foi estruturado seguindo práticas modernas de engenharia de software, separando claramente:
+Sistema de chat institucional com:
 
-- requisitos
-- modelo de domínio
-- design de banco
-- arquitetura
-- tasks de implementação
-- código
-
----
-
-# Objetivo do projeto
-
-O Free Chat Maker tem como objetivo fornecer uma plataforma de comunicação interna organizada, segura e auditável, permitindo:
-
-- comunicação entre usuários autenticados
-- criação de salas públicas
-- envio de mensagens em tempo real
-- envio de código dentro do chat
+- autenticação por CPF e senha
+- solicitação de cadastro com aprovação administrativa
+- salas públicas
+- mensagens em tempo real
 - moderação administrativa
-- rastreabilidade de ações
-- controle de acesso por papéis
+- auditoria de ações sensíveis
 
-O sistema foi pensado como uma aplicação institucional, não como um chat genérico.
+O projeto foi desenvolvido com abordagem Spec-Driven Development, então a implementação acompanha os artefatos em `specs/`.
 
----
+## Stack
 
-# Arquitetura do sistema
+- Frontend: Vue 3, Vuetify, Pinia, Vue Router, Vite
+- Backend: Node.js, Express, Sequelize, WebSocket (`ws`)
+- Banco: PostgreSQL
+- Infra: Docker e Docker Compose
 
-O sistema segue arquitetura cliente-servidor com backend modular.
+## Estrutura
 
-Arquitetura geral:
+```text
+free-chat-maker/
+├── backend/
+├── frontend/
+├── docker/
+├── specs/
+├── docker-compose.yml
+├── docker-compose.dev.yml
+├── dockerenv.example
+└── README.md
+```
 
-Frontend (Vue.js + Vuetify)
-↓
-API REST (Node.js + Express)
-↓
-WebSocket Gateway
-↓
-PostgreSQL (persistência)
-↓
-Docker (infraestrutura)
+## Pré-requisitos
 
----
+Para rodar localmente, você precisa de:
 
-# Stack tecnológica
-
-## Backend
-
-- Node.js
-- Express
-- Sequelize ORM
-- PostgreSQL
-- JWT authentication
-- bcrypt password hashing
-- WebSocket (ws)
-- dotenv
-
-## Frontend
-
-- Vue.js
-- Vuetify
-- Axios
-- WebSocket client
-
-## Infraestrutura
-
+- Node.js 20+
+- npm 10+
 - Docker
 - Docker Compose
-- PostgreSQL container
 
-## Engenharia
+## Modos de execução
 
-- Spec-Driven Development
-- Domain Modeling
-- RBAC authorization
-- Modular backend architecture
+O projeto hoje tem 2 modos principais:
 
----
+1. desenvolvimento híbrido
+   - banco em Docker
+   - backend e frontend rodando localmente com Node/Vite
+2. produção local
+   - frontend, backend e banco rodando com Docker Compose
 
-# Estrutura do projeto
+## Variáveis de ambiente
 
+### Arquivos de exemplo
+
+- raiz: [.env.example](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/.env.example)
+- Docker Compose: [dockerenv.example](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/dockerenv.example)
+- backend local: [backend/.env.example](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/backend/.env.example)
+- frontend opcional: [frontend/.env.example](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/frontend/.env.example)
+
+### Convenção usada no projeto
+
+- `backend/.env`
+  - use quando o backend roda fora do Docker
+- `dockerenv`
+  - use quando a stack roda por `docker compose`
+
+### Variáveis obrigatórias do backend
+
+```env
+PORT=3000
+DB_HOST=localhost
+DB_PORT=5435
+DB_NAME=freechat
+DB_USER=postgres
+DB_PASS=change_me
+JWT_SECRET=change_me
 ```
 
-free-chat-maker/
+### Variável opcional recomendada
 
-backend/
-src/
-
-config/
-database/
-
-models/
-repositories/
-
-services/
-
-controllers/
-
-routes/
-
-middlewares/
-
-websocket/
-
-utils/
-
-app.js
-server.js
-
-frontend/
-
-spec/
-
-specs.md
-use-cases.md
-domain-model.md
-database-design.md
-architecture-design.md
-tasks.md
-
-docker/
-
-README.md
-
+```env
+JWT_EXPIRES_IN=1d
 ```
 
----
+### Observação sobre o frontend
 
-# Abordagem de desenvolvimento
+No deploy padrão com Nginx, o frontend usa proxy interno para:
 
-O projeto segue **Spec-Driven Development (SDD)**:
+- `/api`
+- `/ws`
 
-Fluxo:
+Por isso, estas variáveis são opcionais:
 
+- `VITE_API_BASE_URL`
+- `VITE_WS_BASE_URL`
+
+Você só precisa delas se quiser buildar o frontend apontando para endpoints externos explícitos.
+
+## Como rodar em desenvolvimento
+
+### 1. Subir o banco com Docker
+
+```bash
+cp dockerenv.example dockerenv
+docker compose -f docker-compose.dev.yml up -d postgres
 ```
 
-Spec
-→ Use Cases
-→ Domain Model
-→ Database Design
-→ Architecture
-→ Tasks
-→ Code
+Isso expõe o PostgreSQL na porta `5435`.
 
-```
+### 2. Instalar dependências
 
-Isso evita:
+Backend:
 
-- arquitetura improvisada
-- regras esquecidas
-- refatorações caóticas
-- inconsistência entre requisitos e código
-
----
-
-# Principais funcionalidades
-
-## Cadastro com aprovação administrativa
-
-Usuários não entram automaticamente no sistema.
-
-Fluxo:
-
-Solicitação cadastro  
-→ Revisão admin  
-→ Aprovação  
-→ Liberação acesso  
-
----
-
-## Autenticação segura
-
-Sistema usa:
-
-- JWT
-- hash bcrypt
-- controle de status usuário
-- RBAC
-
-Estados possíveis:
-
-PENDENTE  
-APROVADO  
-BLOQUEADO  
-REJEITADO  
-
----
-
-## Salas públicas
-
-Usuários podem:
-
-- criar salas
-- entrar em salas
-- visualizar histórico
-- interagir em tempo real
-
-Estados da sala:
-
-ATIVA  
-SILENCIADA  
-EXCLUIDA  
-
----
-
-## Mensagens
-
-Suporte a:
-
-- texto
-- código
-- eventos sistema
-- avisos moderação
-
-Mensagens são persistidas.
-
----
-
-## Comunicação em tempo real
-
-Implementado com WebSocket.
-
-Fluxo:
-
-Cliente envia mensagem  
-→ Backend valida  
-→ Backend persiste  
-→ Backend broadcast  
-
----
-
-## Moderação administrativa
-
-Administradores podem:
-
-- bloquear usuários
-- remover mensagens
-- silenciar salas
-- enviar avisos
-- registrar logs
-
-Toda ação administrativa gera auditoria.
-
----
-
-# Modelo de domínio
-
-Principais entidades:
-
-Usuario  
-SolicitacaoCadastro  
-Sala  
-Mensagem  
-EventoParticipacao  
-LogModeracao  
-
-Relacionamentos definidos em:
-
-```
-
-spec/database-design.md
-
-```
-
----
-
-# MVP do sistema
-
-Escopo mínimo inicial:
-
-Login  
-Criar sala  
-Entrar sala  
-Enviar mensagem  
-Broadcast realtime  
-
-Funcionalidades avançadas entram depois.
-
----
-
-# Como executar o backend
-
-## Instalar dependências
-
-```
-
+```bash
 cd backend
-
 npm install
-
 ```
 
-## Configurar variáveis
+Frontend:
 
-Criar:
-
+```bash
+cd frontend
+npm install
 ```
 
-.env
+### 3. Configurar o backend local
 
-```
+Crie o arquivo `backend/.env` a partir de `backend/.env.example`.
 
 Exemplo:
 
-```
-
+```env
 PORT=3000
-
 DB_HOST=localhost
-DB_USER=postgres
-DB_PASS=postgres
+DB_PORT=5435
 DB_NAME=freechat
-
+DB_USER=postgres
+DB_PASS=change_me
+JWT_SECRET=change_me
+JWT_EXPIRES_IN=1d
 ```
 
-## Convenção de ambientes
+### 4. Rodar migrations
 
-Para evitar conflito entre execução local e execução via Docker:
-
-- `backend/.env` deve ser usado quando a API roda fora do Docker
-- `dockerenv` deve ser usado quando a API roda pelo `docker compose`
-
-Diferença principal:
-
-- local: `DB_HOST=localhost` e `DB_PORT=5435`
-- docker: `DB_HOST=postgres` e `DB_PORT=5432`
-
-Arquivos de exemplo disponíveis:
-
+```bash
+cd backend
+npm run migrate
 ```
 
-backend/.env.example
-dockerenv.example
+### 5. Subir backend e frontend
 
-```
+Em terminais separados:
 
-## Rodar servidor
+Backend:
 
-```
-
+```bash
+cd backend
 npm run dev
-
 ```
 
-ou:
+Frontend:
 
+```bash
+cd frontend
+npm run dev
 ```
 
-node src/server.js
+### 6. Endereços locais
 
+- frontend Vite: `http://localhost:5173`
+- backend API: `http://localhost:3000`
+- healthcheck: `http://localhost:3000/health`
+
+## Como rodar em produção local com Docker
+
+### 1. Preparar variáveis
+
+```bash
+cp dockerenv.example dockerenv
 ```
 
----
+Edite `dockerenv` com valores reais para:
 
-# Banco de dados
+- `DB_PASS`
+- `JWT_SECRET`
+- `POSTGRES_PASSWORD`
 
-Sistema usa PostgreSQL.
+### 2. Subir a stack
 
-Design completo:
-
+```bash
+docker compose up -d --build
 ```
 
-spec/database-design.md
+### 3. Endereços
 
+- frontend: `http://localhost:8080`
+- backend interno via proxy do frontend:
+  - `http://localhost:8080/api/...`
+  - `ws://localhost:8080/ws`
+
+### 4. Observações
+
+- no compose de produção, a API e o PostgreSQL não ficam expostos para fora
+- o frontend espera a API ficar saudável antes de subir
+- o backend executa migrations antes de iniciar
+
+## Fluxo de acesso na aplicação
+
+Rotas principais:
+
+- `/login`
+- `/cadastro`
+- `/salas`
+- `/salas/:id`
+- `/admin`
+
+Fluxo comum:
+
+1. visitante solicita cadastro em `/cadastro`
+2. administrador aprova no painel
+3. usuário faz login em `/login`
+4. usuário acessa `/salas`
+5. usuário entra na sala e conversa em tempo real
+
+## Scripts de automação usados no projeto
+
+### Scripts da raiz
+
+Arquivo: [package.json](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/package.json)
+
+```bash
+npm run dev:backend
+npm run dev:frontend
+npm run lint:backend
+npm run lint:frontend
+npm run format:backend
+npm run format:frontend
 ```
 
-Modelagem baseada em:
+Esses scripts são atalhos para executar comandos nas subpastas.
 
-- integridade relacional
-- rastreabilidade
-- soft delete
-- enums controlados
-- RBAC
+### Scripts do backend
 
----
+Arquivo: [backend/package.json](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/backend/package.json)
 
-# Roadmap de desenvolvimento
+Principais comandos:
 
-Ordem:
-
-Infraestrutura  
-Banco  
-Backend core  
-Auth  
-Chat  
-Realtime  
-Frontend  
-Moderação  
-Qualidade  
-Deploy  
-
-Definido em:
-
+```bash
+npm run dev
+npm start
+npm run start:server
+npm run migrate
+npm run migrate:down
+npm test
+npm run lint
 ```
 
-spec/tasks.md
+Scripts operacionais criados:
 
+- [backend/scripts/start-backend.sh](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/backend/scripts/start-backend.sh)
+  - start de produção do backend
+- [backend/scripts/run-migrations.sh](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/backend/scripts/run-migrations.sh)
+  - execução de migrations `up` e `down`
+
+Resumo:
+
+- `npm start`
+  - usa o script de start de produção
+- `npm run migrate`
+  - usa o script operacional de migrations
+- `npm run migrate:down`
+  - faz rollback da migration indicada por `MIGRATION_NAME`
+
+Exemplo de rollback:
+
+```bash
+cd backend
+MIGRATION_NAME=011-add-solicitacao-alvo-to-logs-moderacao.js npm run migrate:down
 ```
 
----
+### Scripts do frontend
 
-# Princípios arquiteturais
+Arquivo: [frontend/package.json](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/frontend/package.json)
 
-O projeto segue:
+Principais comandos:
 
-Separação de responsabilidades  
-Baixo acoplamento  
-Alta coesão  
-Rastreabilidade  
-Evolução incremental  
-Persistência consistente  
-Segurança básica  
-Domínio primeiro  
+```bash
+npm run dev
+npm run build
+npm run build:app
+npm run lint
+npm run preview
+```
 
----
+Script operacional criado:
 
-# Regras importantes do projeto
+- [frontend/scripts/build-frontend.sh](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/frontend/scripts/build-frontend.sh)
+  - build de produção do frontend
 
-Nunca:
+Resumo:
 
-Pular service layer  
-Misturar controller com regra negócio  
-Persistir senha em texto  
-Ignorar RBAC  
-Remover logs  
+- `npm run build`
+  - usa o script operacional de build
+- `npm run build:app`
+  - chama o `vite build` diretamente
 
-Sempre:
+## Docker
 
-Validar domínio no service  
-Persistir antes de broadcast  
-Usar middleware auth  
-Registrar ações administrativas  
+### Arquivos principais
 
----
+- produção: [docker-compose.yml](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/docker-compose.yml)
+- desenvolvimento: [docker-compose.dev.yml](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/docker-compose.dev.yml)
+- documentação complementar: [docker/README.md](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/docker/README.md)
 
-# Possíveis evoluções futuras
+### Diferença entre os arquivos de compose
 
-Salas privadas  
-Notificações  
-Presença online  
-Analytics  
-Sistema de denúncias  
-Busca mensagens  
-Upload arquivos  
-Integração institucional  
+`docker-compose.dev.yml`
 
----
+- expõe banco e API
+- monta volumes de código
+- é voltado para desenvolvimento iterativo
 
-# Status do projeto
+`docker-compose.yml`
 
-Em desenvolvimento.
+- é o compose orientado a produção local
+- não expõe PostgreSQL nem API
+- sobe o frontend em `8080`
+- usa healthcheck para ordenar a subida dos serviços
 
-Fase atual:
+## Qualidade
 
-Backend foundation
+### Backend
 
----
+```bash
+cd backend
+npm run lint
+npm test
+```
 
-# Autor
+### Frontend
 
-Projeto desenvolvido como estudo de arquitetura de software e engenharia de sistemas orientada a especificação.
+```bash
+cd frontend
+npm run lint
+npm run build
+```
 
----
+Observação:
 
-# Licença
+- o frontend ainda possui warnings visuais do ESLint/Vue
+- o backend está com lint e testes passando
+
+## Estado atual dos itens de automação já implementados
+
+Já estão prontos:
+
+- script de start do backend
+- script de build do frontend
+- script de execução de migrations
+- Dockerfile de produção do backend
+- Dockerfile de produção do frontend
+- compose de produção local
+- exemplos de variáveis de ambiente
+
+Ainda pode evoluir depois:
+
+- seed automático do administrador
+- subida validada ponta a ponta em modo de produção local
+- pipeline de CI/CD
+
+## Artefatos de especificação
+
+Os documentos principais do projeto ficam em [specs/](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/specs):
+
+- [specs.md](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/specs/specs.md)
+- [use-cases.md](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/specs/use-cases.md)
+- [domain-model.md](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/specs/domain-model.md)
+- [database-spec.md](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/specs/database-spec.md)
+- [architecture-design.md](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/specs/architecture-design.md)
+- [tasks.md](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/specs/tasks.md)
+- [execution-protocol.md](/home/gustavo/Desktop/TCC_2026_RESEARCH/specs-designer-developer/free-chat-maker/specs/execution-protocol.md)
+
+## Autor
+
+Projeto desenvolvido por Gustavo Rocha com foco educacional e arquitetural.
+
+## Licença
 
 Uso educacional.
-```
-
----
-
-# Próximo passo lógico agora
-
-Agora você tem:
-
-SDD
-Use cases
-Tasks
-README
-
-Você já pode:
-
-**começar a implementação sem improviso.**
