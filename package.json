@@ -1,0 +1,12 @@
+{
+  "name": "free-chat-maker",
+  "private": true,
+  "scripts": {
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "lint:backend": "npm --prefix backend run lint",
+    "lint:frontend": "npm --prefix frontend run lint",
+    "format:backend": "npm --prefix backend run format",
+    "format:frontend": "npm --prefix frontend run format"
+  }
+}

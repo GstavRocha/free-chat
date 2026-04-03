@@ -1,0 +1,44 @@
+# Dependencias
+node_modules/
+*/node_modules/
+.npm/
+.pnpm-store/
+yarn.lock
+
+# Arquivos de ambiente
+.env
+.env.*
+!.env.example
+dockerenv
+dockerenv.*
+!dockerenv.example
+
+# Logs
+*.log
+*.pid
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Artefatos de build
+dist/
+build/
+coverage/
+.cache/
+.vite/
+*.tsbuildinfo/
+
+# Docker e volumes locais
+.docker/
+postgres_data/
+
+# Arquivos do sistema e IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Runtime temporario
+tmp/
+temp/

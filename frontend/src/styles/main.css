@@ -1,0 +1,121 @@
+:root {
+  --app-text-color: #1f1f1f;
+  --app-muted-text: rgba(15, 23, 42, 0.62);
+  --app-root-background:
+    radial-gradient(circle at top, rgba(215, 161, 77, 0.22), transparent 32%),
+    linear-gradient(180deg, #f4efe5 0%, #efe7d8 100%);
+  --app-page-background:
+    radial-gradient(circle at top left, rgba(214, 231, 219, 0.8), transparent 30%),
+    linear-gradient(165deg, #f6efe4 0%, #eef5f2 100%);
+  --app-auth-background:
+    radial-gradient(circle at top left, rgba(201, 233, 226, 0.9), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(255, 217, 166, 0.7), transparent 28%),
+    linear-gradient(135deg, #f6efe7 0%, #eef5f2 100%);
+  --app-registration-background:
+    radial-gradient(circle at top right, rgba(255, 227, 181, 0.85), transparent 32%),
+    radial-gradient(circle at bottom left, rgba(184, 227, 214, 0.72), transparent 34%),
+    linear-gradient(145deg, #f8efe3 0%, #eef6f1 100%);
+  --app-dashboard-background:
+    radial-gradient(circle at top left, rgba(198, 225, 231, 0.8), transparent 28%),
+    linear-gradient(160deg, #f3efe6 0%, #eef4f6 100%);
+  --app-brand-login-gradient: linear-gradient(160deg, #12343b 0%, #1c5d67 100%);
+  --app-brand-registration-gradient: linear-gradient(180deg, #7a341d 0%, #b45309 100%);
+  --app-hero-gradient: linear-gradient(145deg, #12343b 0%, #1e5963 100%);
+  --app-room-header-gradient:
+    radial-gradient(circle at top right, rgba(214, 231, 219, 0.92), transparent 28%),
+    linear-gradient(135deg, #f9f1e5 0%, #ffffff 100%);
+  --app-panel-background: rgba(255, 255, 255, 0.84);
+  --app-panel-strong-text: #f6f8f5;
+  --app-panel-muted-text: rgba(246, 248, 245, 0.82);
+  --app-section-surface: rgba(255, 255, 255, 0.72);
+  --app-message-surface: rgba(255, 255, 255, 0.9);
+  --app-accent-surface: linear-gradient(135deg, #fff4d6 0%, #ffe7bb 100%);
+  color: var(--app-text-color);
+  background: var(--app-root-background);
+  font-family: "Segoe UI", sans-serif;
+}
+
+html[data-theme="dark"] {
+  --app-text-color: #e7edf3;
+  --app-muted-text: rgba(212, 226, 238, 0.68);
+  --app-root-background:
+    radial-gradient(circle at top, rgba(242, 196, 111, 0.1), transparent 28%),
+    linear-gradient(180deg, #091017 0%, #0e1720 100%);
+  --app-page-background:
+    radial-gradient(circle at top left, rgba(67, 145, 129, 0.18), transparent 30%),
+    linear-gradient(165deg, #0d151d 0%, #12202a 100%);
+  --app-auth-background:
+    radial-gradient(circle at top left, rgba(67, 145, 129, 0.16), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(244, 154, 99, 0.12), transparent 28%),
+    linear-gradient(135deg, #0d151d 0%, #13222d 100%);
+  --app-registration-background:
+    radial-gradient(circle at top right, rgba(244, 154, 99, 0.12), transparent 30%),
+    radial-gradient(circle at bottom left, rgba(109, 214, 199, 0.12), transparent 34%),
+    linear-gradient(145deg, #0d151c 0%, #14232b 100%);
+  --app-dashboard-background:
+    radial-gradient(circle at top left, rgba(109, 214, 199, 0.14), transparent 28%),
+    linear-gradient(160deg, #0b131b 0%, #14212a 100%);
+  --app-brand-login-gradient: linear-gradient(160deg, #0f2a30 0%, #18444d 100%);
+  --app-brand-registration-gradient: linear-gradient(180deg, #5c2714 0%, #8e4d14 100%);
+  --app-hero-gradient: linear-gradient(145deg, #10232a 0%, #1a4148 100%);
+  --app-room-header-gradient:
+    radial-gradient(circle at top right, rgba(109, 214, 199, 0.14), transparent 26%),
+    linear-gradient(135deg, #15222b 0%, #101920 100%);
+  --app-panel-background: rgba(22, 33, 43, 0.9);
+  --app-panel-strong-text: #f3f7fb;
+  --app-panel-muted-text: rgba(231, 237, 243, 0.76);
+  --app-section-surface: rgba(22, 33, 43, 0.78);
+  --app-message-surface: rgba(22, 33, 43, 0.88);
+  --app-accent-surface: linear-gradient(135deg, #3f3118 0%, #5b4421 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--app-root-background);
+  color: var(--app-text-color);
+  transition:
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.hero-panel {
+  border: 1px solid rgba(156, 61, 31, 0.12);
+  background:
+    linear-gradient(135deg, rgba(255, 250, 240, 0.98), rgba(247, 243, 234, 0.94)),
+    #fffaf0;
+  box-shadow: 0 28px 70px rgba(78, 52, 46, 0.12);
+}
+
+.eyebrow {
+  display: inline-flex;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(156, 61, 31, 0.08);
+  color: #9c3d1f;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.feature-card {
+  height: 100%;
+  border: 1px solid rgba(32, 90, 82, 0.1);
+  background: rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(8px);
+}

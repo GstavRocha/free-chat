@@ -1,0 +1,17 @@
+# Variaveis do docker compose de producao.
+# Copie este arquivo para `dockerenv` antes de subir os containers.
+
+PORT=3000
+
+DB_HOST=postgres
+DB_PORT=5432
+DB_NAME=freechat
+DB_USER=postgres
+DB_PASS=change_me
+
+JWT_SECRET=change_me
+JWT_EXPIRES_IN=1d
+
+POSTGRES_DB=freechat
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=change_me
